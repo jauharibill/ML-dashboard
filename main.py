@@ -12,7 +12,6 @@ app.config['MYSQL_PASSWORD'] = 'root'
 app.config['MYSQL_DB'] = 'ML'
 mysql = MySQL(app)
 
-
 @app.route("/", methods=['GET'])
 def index():
     return render_template('index.html')
