@@ -26,6 +26,7 @@
               <th scope="col">Visitor Type</th>
               <th scope="col">Weekend</th>
               <th scope="col">Revenue</th>
+              <th scope="col" colspan="2">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -50,6 +51,8 @@
                 <td>{{ row.16 }}</td>
                 <td>{{ row.17 }}</td>
                 <td>{{ row.18 }}</td>
+                <td><a href="edit/{{ row.0 }}" class="btn btn-warning">Edit</a></td>
+                <td><a href="delete/{{ row.0 }}" class="btn btn-danger">Delete</a></td>
               </tr>
             {% endfor %}
           </tbody>

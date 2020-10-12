@@ -15,7 +15,6 @@ def index():
     cur = myDB.connection.cursor()
     cur.execute("SELECT * FROM online_shop ORDER BY id DESC LIMIT 20")
     data = cur.fetchall()
-    cur.close()
     return render_template('index.html', onlineshop=data)
 
 @app.route("/create", methods=['GET'])
@@ -29,5 +28,30 @@ def store():
     cur = myDB.connection.cursor()
     cur.execute("INSERT INTO online_shop(id, administrative, administrative_duration, informational, informational_duration, productrelated, productrelated_duration, bouncerates, exitrates, pagevalues, specialday, month, operatingsystems, browser, region, traffictype, visitortype, weekend, revenue) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (value.id, value.administrative, value.administrative_duration, value.informational, value.informational_duration, value.productrelated, value.productrelated_duration, value.bouncesrates, value.exitrates, value.pagevalues, value.specialday, value.month, value.operatingsystems, value.browser, value.region, value.traffictype, value.visitortype, value.weekend, value.revenue))
     myDB.connection.commit()
-    cur.close()
     return redirect(url_for('index'))
+
+@app.route("/edit/<int:id>", methods=['GET'])
+def edit(id):
+    cur = myDB.connection.cursor()
+    cur.execute("SELECT * FROM online_shop WHERE id=%s", (id,))
+    data = cur.fetchone()
+    return render_template('edit.html', onlineshop=data)
+
+@app.route("/update/<int:id>", methods=['POST'])
+def update(id):
+    data = request.form
+    value = OnlineshopRequest(data)
+    cur = myDB.connection.cursor()
+    cur.execute("UPDATE online_shop SET administrative=%s, administrative_duration=%s, informational=%s, informational_duration=%s, productrelated=%s, productrelated_duration=%s, bouncerates=%s, exitrates=%s, pagevalues=%s, specialday=%s, month=%s, operatingsystems=%s, browser=%s, region=%s, traffictype=%s, visitortype=%s, weekend=%s, revenue=%s WHERE id=%s", (value.administrative, value.administrative_duration, value.informational, value.informational_duration, value.productrelated, value.productrelated_duration, value.bouncesrates, value.exitrates, value.pagevalues, value.specialday, value.month, value.operatingsystems, value.browser, value.region, value.traffictype, value.visitortype, value.weekend, value.revenue, id))
+    myDB.connection.commit()
+    return redirect(url_for('index'))
+
+@app.route("/delete/<int:id>", methods=['GET'])
+def delete(id):
+    cur = myDB.connection.cursor()
+    cur.execute("DELETE FROM online_shop WHERE id=%s", (id,))
+    myDB.connection.commit()
+    return redirect(url_for('index'))
+
+if __name__ == "__main__":
+    app.run()
